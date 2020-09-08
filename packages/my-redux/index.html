@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写Redux</title>
+</head>
+
+<body>
+    <script type="module">
+        import exceptiontimeMiddleware from './middlewares/exceptiontimeMiddleware.js';
+        import loggerMiddleware from './middlewares/loggerMiddleware.js';
+        import timeMiddleware from './middlewares/timeMiddleware.js';
+
+        import { createStore, combineReducers, applyMiddleware, bindActionCreators } from './redux/index.js'
+        import userReducer from './reducers/userReducer.js'
+        import infoReducer from './reducers/infoReducer.js'
+
+        import { setName, setAge } from './actions/user.js'
+        import { setInfo } from './actions/info.js'
+
+        const reducer = combineReducers({
+            info: infoReducer,
+            user: userReducer,
+        })
+
+        // 初始化中间件  套娃写法丑陋
+        // const next = store.dispatch
+        // const logger = loggerMiddleware(store);
+        // const exception = exceptiontimeMiddleware(store);
+        // const time = timeMiddleware(store);
+        // store.dispatch = exception(time(logger(next)));
+
+        const rewriteCreateStoreFunc = applyMiddleware(
+            exceptiontimeMiddleware,
+            timeMiddleware,
+            loggerMiddleware
+        );
+        const store = createStore(reducer, {}, rewriteCreateStoreFunc)
+
+        store.subscribe((data) => {
+            console.log(`name is ${data.user.name}`);
+        })
+
+        store.subscribe((data) => {
+            console.log(`age is ${data.info.info}`);
+        })
+
+        // store.dispatch({
+        //     type: 'CHANGE_NAME'
+        // })
+        // store.dispatch({
+        //     type: 'CHANGE_AGE'
+        // })
+        const actions = bindActionCreators({
+            setAge,
+            setInfo,
+            setName
+        }, store.dispatch)
+        actions.setName()
+        actions.setInfo()
+    </script>
+</body>
+
+</html>
