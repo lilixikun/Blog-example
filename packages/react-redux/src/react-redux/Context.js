@@ -1,6 +1,5 @@
 import React from 'react'
 
-const { Provider, Consumer } = React.createContext()
+const ReactReduxContext = React.createContext()
 
-export { Provider, Consumer }
-
+export default ReactReduxContext
