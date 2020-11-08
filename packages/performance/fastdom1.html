@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fastdom读写分离</title>
+    <script src="./fastdom.min.js"></script>
+    <style>
+        div {
+            display: flex;
+            margin: 20px;
+        }
+
+        div img {
+            height: 375px;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <img src="https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1593106255,4245861836&fm=26&gp=0.jpg">
+        <img src="https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1593106255,4245861836&fm=26&gp=0.jpg">
+        <img src="https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1593106255,4245861836&fm=26&gp=0.jpg">
+    </div>
+    <div>
+        <img src="https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1593106255,4245861836&fm=26&gp=0.jpg">
+        <img src="https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1593106255,4245861836&fm=26&gp=0.jpg">
+        <img src="https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1593106255,4245861836&fm=26&gp=0.jpg">
+    </div>
+    <div>
+        <img src="https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1593106255,4245861836&fm=26&gp=0.jpg">
+        <img src="https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1593106255,4245861836&fm=26&gp=0.jpg">
+        <img src="https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1593106255,4245861836&fm=26&gp=0.jpg">
+    </div>
+
+    <script>
+        const update = (times) => {
+            let imgs = document.getElementsByTagName('img')
+            for (let i = 0; i < imgs.length; i++) {
+                fastdom.measure(() => {
+                    const width = imgs[i].offsetTop;
+                    fastdom.mutate(() => {
+                        imgs[i].style.width = ((Math.sin(width + times / 1000) + 1) * 500) + 'px'
+                    });
+                });
+            }
+            window.requestAnimationFrame(update)
+        }
+
+        window.requestAnimationFrame(update)
+    </script>
+</body>
+
+</html>

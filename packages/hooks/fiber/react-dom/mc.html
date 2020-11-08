@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        port2.postMessage('发送给port1')
+        let frameDeadline; // 这一帧的截止时间
+        let activeFrameTime = 1000 / 60
+        let pendingCallback
+
+        let channel = new MessageChannel()
+        channel.port2.onmessage = function (event) {
+            let currentTime = performance.now()
+            // 如果帧的截止时间已经小于当前时间 说明已经超时了
+            let didTimeout = frameDeadline <= currentTime
+            if (didTimeout || timeRemaining() > 0) {
+                pendingCallback && pendingCallback({ didTimeoutm, timeRemaining })
+            }
+        }
+
+        // 告诉浏览器在剩余时间执行
+        window.requestIdleCallback = (callback, options) => {
+            requestAnimationFrame((rafTime) => {
+                console.log('rafTime', rafTime);
+                // 每一帧开始的时间加上 16.6 就是一帧的截止时间
+                frameDeadline = rafTime + activeFrameTime
+                pendingCallback = callback
+                // 其实发消息之后 相当于添加一个宏任务
+                channel.port1.postMessage('发送给port2')
+            })
+        }
+    </script>
+</body>
+
+</html>
