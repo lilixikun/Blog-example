@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // let obj = {
+        //     func: function () {
+        //         alert(1)
+        //     },
+        //     obj: { a: 1 },
+        //     obj1: { a: { b: 3 } },
+        //     arr: [1, 2, 3],
+        //     und: undefined,
+        //     reg: /123/,
+        //     date: new Date(0),
+        //     NaN: NaN,
+        //     infinity: Infinity,
+        //     sym: Symbol(1),
+        //     set: new Set([1, 2, 3]),
+        //     map: new Map([['a', 1], ['b', 9]]),
+        // }
+
+        // Object.defineProperty(obj, 'innumerable', {
+        //     enumerable: false,
+        //     value: 'innumerable'
+        // })
+        // console.log('obj', obj);
+        // var str = JSON.stringify(obj);
+        // var obj1 = JSON.parse(str);
+        // console.log('obj1', obj1);
+
+        // function deepCopy(target) {
+        //     if (typeof target === "object") {
+        //         if (Array.isArray(target)) {
+        //             var newArr = []
+        //             for (var i = 0; i < target.length; i++) newArr.push(target[i])
+        //             return newArr
+        //         } else {
+        //             var newObj = {}
+        //             for (var key in target) {
+        //                 newObj[key] = deepCopy(target[key])
+        //             }
+        //             return newObj
+        //         }
+        //     } else {
+        //         return target
+        //     }
+        // }
+        // let obj = {
+        //     func: function () {
+        //         alert(1)
+        //     },
+        //     obj: { a: 1 },
+        //     obj1: { a: { b: 3 } },
+        //     arr: [1, 2, 3],
+        //     und: undefined,
+        //     reg: /123/,
+        //     date: new Date(0),
+        //     NaN: NaN,
+        //     infinity: Infinity,
+        //     sym: Symbol(1),
+        //     set: new Set([1, 2, 3]),
+        //     map: new Map([['a', 1], ['b', 9]]),
+        // }
+        // var obj1 = deepCopy(obj)
+        // obj.obj.a = 22
+        // console.log(obj1);
+        // console.log(obj);
+
+        function clone(target) {
+            if (typeof target === "object") {
+                let cloneTarget = Array.isArray(target) ? [] : {};
+                for (const key in target) {
+                    cloneTarget[key] = clone(target[key]);
+                }
+                return cloneTarget;
+            } else {
+                return target;
+            }
+        }
+
+        const a = { name: 'aotu', age: 20, arr: [1, 2, 3], test: { data: { name: "clone" } } }
+        let b = clone(a)
+        a.test.data.name = "clone111"
+        console.log(b);
+        console.log(a);
+    </script>
+</body>
+
+</html>
